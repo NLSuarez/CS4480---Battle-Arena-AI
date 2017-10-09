@@ -1,0 +1,27 @@
+#Button example
+		btn = QPushButton('Quit', self)
+		btn.clicked.connect(QCoreApplication.instance().quit)
+		btn.setToolTip('Click this to quit.')
+		btn.resize(btn.sizeHint()) #sizeHint gives a recommended size
+		btn.move(50, 50)
+
+self.setGeometry(200, 200, 600, 400)
+		#combination of the following two lines with different parameters
+		'''
+		w.move(200, 200)
+		w.resize(600, 400)
+
+reply = QMessageBox.question(self, 'Message',
+			"Are you sure you want to forefeit?", QMessageBox.Yes |
+			QMessageBox.No, QMessageBox.No)
+
+		'''
+		From zetcode.com/gui/pyqt5/firstprograms:
+		We show a message box with two buttons: Yes and No. The first string appears on the titlebar. The second string 
+		is the message text displayed by the dialog. The third argument specifies the combination of buttons appearing 
+		in the dialog. The last parameter is the default button. It is the button which has initially the keyboard focus.
+		The return value is stored in the reply variable. 
+		'''
+
+self.statusBar().showMessage('Ready')
+
