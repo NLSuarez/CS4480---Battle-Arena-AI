@@ -1,0 +1,27 @@
+Things to leave out(for now):
+CLASSES
+MP
+RANDOMIZED MOVESETS
+*STATUS EFFECTS
+
+*=Would like to include most
+
+Things included:
+2 combatants
+10 moves
+	-2 non-elemental
+		-1 physical
+		-1 magical
+	-8 elemental
+		-4 physical based
+		-4 magical based
+2 weaknesses:
+	Each combatant will be either weak to magic or physical.
+	Each combatant will be weak to one and only one element.
+		Will usually be the opposite of the element they are strongest in
+2 affinities:
+	Each combatant will be strong in either physical or magic
+	Each combatant will be strong in one element
+		Strong in the element will mean that the person is resistant to the damage and can deal more damage with it
+
+
