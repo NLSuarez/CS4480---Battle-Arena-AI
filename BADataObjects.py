@@ -33,14 +33,13 @@ class Combatant(object):
 	MATT = 0
 	DEF = 0
 	MDEF = 0
-	MOVESET = {}
+	#MOVESET = {}
 
 	def __init__(self, name):
 		super(Combatant, self).__init__()
 		self.NAME = name
 		self.randomizeElements()
 		self.generateStats()
-		self.createMoveset()
 
 	def randomizeElements(self):
 		'''
@@ -169,7 +168,3 @@ class Combatant(object):
 		}
 
 		return
-
-
-
-
