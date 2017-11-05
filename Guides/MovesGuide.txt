@@ -1,0 +1,52 @@
+Move Guide:
+
+Attack
+Name:Attack
+Type:PHYSICAL
+Element:NONE
+
+Arcane Blast
+Name:Arcane Blast
+Type:MAGICAL
+Element:NONE
+
+Flametongue
+Name:Flametongue
+Type:PHYSICAL
+Element:FIRE
+
+Liquid Steel
+Name:Liquid Steel
+Type:PHYSICAL
+Element:WATER
+
+Aeroblade
+Name:Aeroblade
+Type:PHYSICAL
+Element:WIND
+
+Terablade
+Name:Terablade
+Type:PHYSICAL
+Element:EARTH
+
+Fireblast
+Name:Fireblast
+Type:MAGICAL
+Element:FIRE
+
+Aeroblast
+Name:Aeroblast
+Type:MAGICAL
+Element:WIND
+
+Waterblast
+Name:Waterblast
+Type:MAGICAL
+Element:WATER
+
+Terablast
+Name:Terablast
+Type:MAGICAL
+Element:EARTH
+
