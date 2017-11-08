@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+#python modules
+import os
 #3rd party modules
 from easyAI import TwoPlayersGame
 from easyAI.Player import Human_Player
@@ -11,22 +15,41 @@ if __name__== '__main__':
 	#Create the necessary objects for attack moves and store them
 	Available_Moves = createMoveset()
 
-	#Print these strings into a .txt document
-	print("Available Moves:")
-	for item in Available_Moves:
-		print(item)
-		print("Name:{}".format(Available_Moves[item].NAME))
-		print("Type:{}".format(Available_Moves[item].TYPE))
-		print("Element:{}".format(Available_Moves[item].ELEMENT))
+	'''
+	#This is a one time script command that is used to create a text
+	#document with all available moves and their stats.'''
 
+	OutFileName = "./Guides/MovesGuide.txt"
+	'''OutFile = open(OutFileName, 'w')
+	OutFile.write("Move Guide:\n\n")
+	for item in Available_Moves:
+		OutFile.write(item+"\n")
+		OutFile.write("Name:{}\n".format(Available_Moves[item].NAME))
+		OutFile.write("Type:{}\n".format(Available_Moves[item].TYPE))
+		OutFile.write("Element:{}\n".format(Available_Moves[item].ELEMENT))
+		OutFile.write("\n") #Extra space for readability
+	OutFile.close()
+	#End script
+	'''
+	os.startfile(os.path.normpath(OutFileName))#Windows only
 	#Create human player stats
 	Human = BADataObjects.Combatant("Stefan")
-	print("Human Stats:")
+	OutFileName = "./Stats/PlayerStats.txt"
+	OutFile = open(OutFileName, 'w')
+	OutFile.write("Human Stats:\n\n")
 	for attr, value in Human.__dict__.items():
-		print(attr, value)
+		OutFile.write(attr + ": " + str(value) + "\n")
+
+	OutFile.close()
+	os.startfile(os.path.normpath(OutFileName))#Windows only
 
 	#Create AI player stats
 	AI = BADataObjects.Combatant("Computer")
-	print("Computer Stats:")
+	OutFileName = "./Stats/ComputerStats.txt"
+	OutFile = open(OutFileName, 'w')
+	OutFile.write("Computer Stats:\n\n")
 	for attr, value in AI.__dict__.items():
-		print(attr, value)
+		OutFile.write(attr + ": " + str(value) + "\n")
+
+	OutFile.close()
+	os.startfile(os.path.normpath(OutFileName))#Windows only
