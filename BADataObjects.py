@@ -141,30 +141,38 @@ class Combatant(object):
 
 		return
 
-	def createMoveset(self):
-		#Moves are hardcoded to save time
-		Normal_Physical = AttackMove("Attack", "PHYSICAL", "NONE")
-		Normal_Magical = AttackMove("Arcane Blast", "MAGICAL", "NONE")
-		Fire_Physical = AttackMove("Flametongue", "PHYSICAL", "FIRE")
-		Water_Physical = AttackMove("Liquid Steel", "PHYSICAL", "WATER")
-		Wind_Physical = AttackMove("Aeroblade", "PHYSICAL", "WIND")
-		Earth_Physical = AttackMove("Terablade", "PHYSICAL", "EARTH")
-		Fire_Magical = AttackMove("Fireblast", "MAGICAL", "FIRE")
-		Wind_Magical = AttackMove("Aeroblast", "MAGICAL", "WIND")
-		Water_Magical = AttackMove("Waterblast", "MAGICAL", "WATER")
-		Earth_Magical = AttackMove("Terablast", "MAGICAL", "EARTH")
+class Battle( TwoPlayersGame ):
+	"""
+	Rules:
+	1. No board.
+	2. 2 players.
+	3. Attack that decreases opponents health to 0 fastest should be dominant
+	strategy
+	"""
 
-		self.MOVESET = {
-			"Attack" : Normal_Physical,
-			"Arcane Blast" : Normal_Magical,
-			"Flametongue" : Fire_Physical,
-			"Liquid Steel" : Water_Physical,
-			"Aeroblade" : Wind_Physical,
-			"Terablade" : Earth_Physical,
-			"Fireblast" : Fire_Magical,
-			"Aeroblast" : Wind_Magical,
-			"Waterblast" : Water_Magical,
-			"Terablast" : Earth_Magical
-		}
+	def __init__(self, players):
+		self.players = players
+		self.nplayer = 1 # player 1 starts.
+		return
 
+	def possible_moves(self):
+		return
+
+	def make_move(self, move):
+		return
+
+	def unmake_move(self, move): # optional method (speeds up the AI)
+		return
+
+	def lose(self):
+		""" Are you at 0 hp? """
+		return
+
+	def is_over(self):
+		return self.lose()
+
+	def show(self):
+		return
+
+	def scoring(self):
 		return
