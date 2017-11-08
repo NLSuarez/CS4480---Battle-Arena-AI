@@ -338,7 +338,7 @@ class Battle( TwoPlayersGame ):
 		self.opponent.HP = self.opponent.HP - Damage
 
 	def unmake_move(self, move): # optional method (speeds up the AI)
-				#initialize variables
+		#initialize variables
 		Damage = 0
 		
 		#Get positive attributes from current player
@@ -398,4 +398,71 @@ class Battle( TwoPlayersGame ):
 		#nothing, but learns as we go. IF the AI makes a move, the score should be rated
 		#based on an algorithm that only takes into account knowns based on the 
 		#Human_Knowns dictionary.
-		return
+		score = 0 #initiate at 0
+		#If you have lost, your score is immediately -100
+		if self.lose():
+			score = -100
+			return score
+		else:
+			pass
+		#Otherwise, use the formula
+		#initialize variables
+		Damage = 0
+		
+		#Get positive attributes from current player
+		#Positive attributes will ALWAYS be known
+
+		ATT = self.player.ATT
+		ATT_MIN = ATT * 0.2 # Minimum of 20% ATT value as damage
+		MATT = self.player.MATT
+		MATT_MIN = MATT * 0.2 # Minimum of 20% MATT value as damage
+		AFFINITY = self.player.ELEMENTAL_AFFINITY
+		
+		#Get reductive attributes from other player
+		#Reductive attributes may or may NOT be known
+		if self.Human_Knowns["DEF"]:
+			DEF = self.opponent.DEF
+		else:
+			DEF = 0 #If the AI doesn't know the defense, we assume we will do 100% of our att
+
+		#Repeat for others
+		if self.Human_Knowns["MDEF"]:
+			MDEF = self.opponent.MDEF
+		else:
+			MDEF = 0
+		if self.Human_Knowns["Weakness"]:
+			WEAKNESS = self.opponent.ELEMENTAL_WEAKNESS
+		else:
+			WEAKNESS = False
+
+		#Design note: Affinity and weakness each multiply damage by 1.5.
+		#Max multiplier is therefore 2.25.
+		'''PROBLEM!!! Move isn't available here! Move "moves" back to the Combatant classes.
+		ELEMENTAL_MULTIPLIER = 1
+		if move.ELEMENT == AFFINITY and move.ELEMENT == WEAKNESS:
+			ELEMENTAL_MULTIPLIER = 2.25
+		elif move.ELEMENT == AFFINITY:
+			ELEMENTAL_MULTIPLIER = 1.5
+		elif move.ELEMENT == WEAKNESS:
+			ELEMENTAL_MULTIPLIER = 1.5
+
+		#Determine absolute damage with given attributes
+		if move.TYPE == 'PHYSICAL':
+			#Curb to minimum
+			ROUGH_DAMAGE = ATT - DEF
+			if ROUGH_DAMAGE < ATT_MIN:
+				ROUGH_DAMAGE = ATT_MIN
+			else:
+				pass
+			Damage = ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER
+		elif move.TYPE == 'MAGICAL':
+			#Curb to minimum
+			ROUGH_DAMAGE = MATT - MDEF
+			if ROUGH_DAMAGE < MATT_MIN:
+				ROUGH_DAMAGE = MATT_MIN
+			else:
+				pass
+			Damage = ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER
+		'''
+
+		return score
