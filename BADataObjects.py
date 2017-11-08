@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 import random
+#3rd party modules
+from easyAI import TwoPlayersGame
+from easyAI.Player import Human_Player
 
 TYPE_OPTIONS = [
 	'MAGICAL'

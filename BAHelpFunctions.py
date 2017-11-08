@@ -1,7 +1,7 @@
+#!/usr/bin/python3
 from BADataObjects import AttackMove
 
 '''Docstring: To create attack moves.
-#!/usr/bin/python3
 Moves are hardcoded to save time.'''
 def createMoveset():
 	Normal_Physical = AttackMove("Attack", "PHYSICAL", "NONE")

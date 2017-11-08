@@ -2,9 +2,6 @@
 
 #python modules
 import os
-#3rd party modules
-from easyAI import TwoPlayersGame
-from easyAI.Player import Human_Player
 #My modules
 from BADataObjects import Battle, Combatant
 from BAHelpFunctions import createMoveset
@@ -20,7 +17,7 @@ if __name__== '__main__':
 	#document with all available moves and their stats.'''
 
 	OutFileName = "./Guides/MovesGuide.txt"
-	'''OutFile = open(OutFileName, 'w')
+	OutFile = open(OutFileName, 'w')
 	OutFile.write("Move Guide:\n\n")
 	for item in Available_Moves:
 		OutFile.write(item+"\n")
@@ -30,10 +27,10 @@ if __name__== '__main__':
 		OutFile.write("\n") #Extra space for readability
 	OutFile.close()
 	#End script
-	'''
+	
 	os.startfile(os.path.normpath(OutFileName))#Windows only
 	#Create human player stats
-	Human = BADataObjects.Combatant("Stefan")
+	Human = Combatant("Stefan")
 	OutFileName = "./Stats/PlayerStats.txt"
 	OutFile = open(OutFileName, 'w')
 	OutFile.write("Human Stats:\n\n")
@@ -44,7 +41,7 @@ if __name__== '__main__':
 	os.startfile(os.path.normpath(OutFileName))#Windows only
 
 	#Create AI player stats
-	AI = BADataObjects.Combatant("Computer")
+	AI = Combatant("Computer")
 	OutFileName = "./Stats/ComputerStats.txt"
 	OutFile = open(OutFileName, 'w')
 	OutFile.write("Computer Stats:\n\n")
