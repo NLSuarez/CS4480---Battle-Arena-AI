@@ -1,3 +1,4 @@
+'''Backup version of the project before I decided to scrap easyAI'''
 #!/usr/bin/env python3
 
 #python modules

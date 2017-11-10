@@ -1,3 +1,5 @@
+'''Backup version of the project before I decided to scrap easyAI'''
+
 #!/usr/bin/python3
 import random
 from math import ceil

@@ -1,12 +1,11 @@
 Computer Stats:
 
-AI_algo: <easyAI.AI.Negamax.Negamax object at 0x0000000002BD82B0>
-name: Computer
+AI_algo: <easyAI.AI.Negamax.Negamax object at 0x02A29F50>
 move: {}
 ELEMENTAL_AFFINITY: EARTH
-ELEMENTAL_WEAKNESS: WATER
+ELEMENTAL_WEAKNESS: WIND
 HP: 500
-ATT: 95
-MATT: 31
-MDEF: 82
-DEF: 41
+ATT: 82
+MATT: 25
+DEF: 79
+MDEF: 36
