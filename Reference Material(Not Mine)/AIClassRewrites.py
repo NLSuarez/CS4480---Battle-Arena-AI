@@ -64,7 +64,7 @@ class AI_Player:
         self.move = {}
 
     def ask_move(self, game):
-return self.AI_algo(game)
+        return self.AI_algo(game)
 
 '''Two player game class'''
 class TwoPlayersGame:
@@ -210,4 +210,4 @@ class TwoPlayersGame:
         """
         result = self.make_move(move)
         self.switch_player()
-return result
+        return result

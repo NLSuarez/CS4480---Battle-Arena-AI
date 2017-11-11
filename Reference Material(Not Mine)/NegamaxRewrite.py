@@ -188,4 +188,4 @@ class Negamax:
 
         self.alpha = negamax(game, self.depth, self.depth, scoring,
                      -self.win_score, +self.win_score, self.tt)
-return game.ai_move
+        return game.ai_move

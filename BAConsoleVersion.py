@@ -40,7 +40,7 @@ if __name__== '__main__':
 
 	#Create AI player stats
 	ai_algo = Negamax(2) #Think for this round and the next.
-	AI = AICombatant(ai_algo)
+	AI = AICombatant(ai_algo, "Computer")
 	OutFileName = "./Stats/ComputerStats.txt"
 	OutFile = open(OutFileName, 'w')
 	OutFile.write("Computer Stats:\n\n")
