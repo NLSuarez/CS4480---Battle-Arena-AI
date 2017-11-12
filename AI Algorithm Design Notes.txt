@@ -1,0 +1,21 @@
+Algorithm for AI:
+
+Ideal: < 50 defensive stat + > 50 opposing offensive stat + affinity = weakness
+If you find that ideal, stop looking and use that attack alone. Otherwise experiment.
+Find the defensive stats. If you don't know the defensive stats, then use attacks and look at the damage.
+	In reality, the program already knows the damage because it can read the move object. We're
+	just simulating the unknown here. Instead of performing calculations, we'll allow it to read the move
+	object after it has entered a situation that would allow it to calculate based on the prexisting formula.
+
+Value of a move is determined by:
+
+(Offensive Stat - Guess Defensive Stat)*Elemental Affinity Modifier*Guess Elemental Weakness Modifier+Investigate Mod
+
+Offensive Stat: ATT or MATT of AI
+Guess Defensive Stat: Guess at DEF or MDEF of the human. 0 if we don't yet know. Otherwise, actual value.
+Elemental Affinity Modifier: 1.5 if the attack is the AI's elemental affinity.
+Guess Elemental Weakness: Guess at elemental weakness of the human. Always x1 if we don't know.
+	We should have a table here to where the AI can guess the weakness.
+Investigate Mod: We will have a modifier of some sort to make certain moves higher on an execution priority list.
+	It should be an arbitrarily high number so the AI can't ignore it and doesn't just get stuck using their
+	hypothetically best attack repeatedly.
