@@ -30,6 +30,7 @@ def createMoveset():
 
 	return MOVESET
 
+'''To create a guide for the player.'''
 def createMoveGuide():
 	Normal_Physical = AttackMove("Attack", "PHYSICAL", "NONE")
 	Normal_Magical = AttackMove("Arcane Blast", "MAGICAL", "NONE")
@@ -66,3 +67,14 @@ def createMoveGuide():
 		OutFile.write("\n") #Extra space for readability
 
 	OutFile.close()
+
+'''To return the opposite element.'''
+def findOpposingElement(element):
+	#python version of a switch statement.
+	reverse_element = {
+		'FIRE':'WATER',
+		'WATER':'EARTH',
+		'EARTH':'WIND',
+		'WIND':'FIRE'
+	}
+	return reverse_element[element]

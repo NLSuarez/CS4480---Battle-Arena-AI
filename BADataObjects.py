@@ -199,6 +199,7 @@ class Battle( TwoPlayersGame ):
 	strategy
 	"""
 
+	#AI data collection on opponent.
 	#Determines the known factors of the human by the AI
 	Human_Knowns = {
 		"Affinity": False,
@@ -208,6 +209,13 @@ class Battle( TwoPlayersGame ):
 		"DEF": False,
 		"MDEF": False
 	}
+
+	Elements_Tested = [
+	]
+	#Speed up the AI
+	#We will store the ideal move's index after it's found.
+	#This will be determined after, at most, 4 moves.
+	Ideal_Move = False
 
 	def __init__(self, moveset, players):
 		self.moveset = moveset
@@ -266,53 +274,6 @@ class Battle( TwoPlayersGame ):
 
 		self.opponent.HP = self.opponent.HP - Damage
 
-	def unmake_move(self, move): # optional method (speeds up the AI)
-		#initialize variables
-		Damage = 0
-
-		#Get positive attributes from current player
-
-		ATT = self.player.ATT
-		ATT_MIN = int(ceil(ATT * 0.2)) # Minimum of 20% ATT value as damage
-		MATT = self.player.MATT
-		MATT_MIN = int(ceil(MATT * 0.2)) # Minimum of 20% MATT value as damage
-		AFFINITY = self.player.ELEMENTAL_AFFINITY
-
-		#Get reductive attributes from other player
-		DEF = self.opponent.DEF
-		MDEF = self.opponent.MDEF
-		WEAKNESS = self.opponent.ELEMENTAL_WEAKNESS
-
-		#Design note: Affinity and weakness each multiply damage by 1.5.
-		#Max multiplier is therefore 2.25.
-		ELEMENTAL_MULTIPLIER = 1
-		if move.ELEMENT == AFFINITY and move.ELEMENT == WEAKNESS:
-			ELEMENTAL_MULTIPLIER = 2.25
-		elif move.ELEMENT == AFFINITY:
-			ELEMENTAL_MULTIPLIER = 1.5
-		elif move.ELEMENT == WEAKNESS:
-			ELEMENTAL_MULTIPLIER = 1.5
-
-		#Determine absolute damage with given attributes
-		if move.TYPE == 'PHYSICAL':
-			#Curb to minimum
-			ROUGH_DAMAGE = ATT - DEF
-			if ROUGH_DAMAGE < ATT_MIN:
-				ROUGH_DAMAGE = ATT_MIN
-			else:
-				pass
-			Damage = ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER
-		elif move.TYPE == 'MAGICAL':
-			#Curb to minimum
-			ROUGH_DAMAGE = MATT - MDEF
-			if ROUGH_DAMAGE < MATT_MIN:
-				ROUGH_DAMAGE = MATT_MIN
-			else:
-				pass
-			Damage = ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER
-
-		self.opponent.HP = self.opponent.HP + Damage #Run the same calculations, but reverse damage.
-
 	def lose(self):
 		return self.player.HP == 0
 
@@ -322,77 +283,3 @@ class Battle( TwoPlayersGame ):
 
 	def show(self):
 		print("Your opponent now has HP:{}".format(self.opponent.HP))
-
-	def scoring(self, move):
-		#Insert scoring algorithm
-		#Scoring is NOT the same as the make_move algorithm.
-		#Scoring depends on WHAT the AI knows. The AI starts by knowing
-		#nothing, but learns as we go. IF the AI makes a move, the score should be rated
-		#based on an algorithm that only takes into account knowns based on the
-		#Human_Knowns dictionary.
-
-		#initialize local variables
-		guess_damage = 0
-		score = 0
-
-		#fetch human knowns
-		know_weakness = Human_Knowns["Weakness"]
-		know_def = Human_Knowns["DEF"]
-		know_mdef = Human_Knowns["MDEF"]
-
-		#Get positive attributes from current player
-
-		ATT = self.player.ATT
-		ATT_MIN = int(ceil(ATT * 0.2)) # Minimum of 20% ATT value as damage
-		MATT = self.player.MATT
-		MATT_MIN = int(ceil(MATT * 0.2)) # Minimum of 20% MATT value as damage
-		AFFINITY = self.player.ELEMENTAL_AFFINITY
-
-		#Get reductive attributes from other player
-		#Note, you can only know these in a score from previous moves.
-		if know_def:
-			DEF = self.opponent.DEF
-		else:
-			DEF = 0
-
-		if know_mdef:
-			MDEF = self.opponent.MDEF
-		else:
-			MDEF = 0
-
-		if know_weakness:
-			WEAKNESS = self.opponent.ELEMENTAL_WEAKNESS
-		else:
-			WEAKNESS = "NONE"
-
-		#Design note: Affinity and weakness each multiply damage by 1.5.
-		#Max multiplier is therefore 2.25.
-		ELEMENTAL_MULTIPLIER = 1
-		if move.ELEMENT == AFFINITY and move.ELEMENT == WEAKNESS:
-			ELEMENTAL_MULTIPLIER = 2.25
-		elif move.ELEMENT == AFFINITY:
-			ELEMENTAL_MULTIPLIER = 1.5
-		elif move.ELEMENT == WEAKNESS:
-			ELEMENTAL_MULTIPLIER = 1.5
-
-		#Determine absolute damage with given attributes
-		if move.TYPE == 'PHYSICAL':
-			#Curb to minimum
-			ROUGH_DAMAGE = ATT - DEF
-			if ROUGH_DAMAGE < ATT_MIN:
-				ROUGH_DAMAGE = ATT_MIN
-			else:
-				pass
-			Damage = ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER
-		elif move.TYPE == 'MAGICAL':
-			#Curb to minimum
-			ROUGH_DAMAGE = MATT - MDEF
-			if ROUGH_DAMAGE < MATT_MIN:
-				ROUGH_DAMAGE = MATT_MIN
-			else:
-				pass
-			guess_damage = ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER
-
-		score = self.opponent.HP - guess_damage
-
-		return score
