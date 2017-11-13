@@ -75,6 +75,7 @@ def findOpposingElement(element):
 		'FIRE':'WATER',
 		'WATER':'EARTH',
 		'EARTH':'WIND',
-		'WIND':'FIRE'
+		'WIND':'FIRE',
+		'NONE':'NONE'
 	}
 	return reverse_element[element]

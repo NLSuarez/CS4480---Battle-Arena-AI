@@ -111,7 +111,7 @@ def score_move(game, move):
 
 	NOTE: Skip this step if you know both DEF and MDEF of the human.
 	'''
-	if not know_def or not know_mdef):
+	if not know_def or not know_mdef:
 		if move.ELEMENT != AFFINITY:
 			if move.TYPE == "PHYSICAL" and not know_def:
 				learning_modifier = 0.5 * (ATT - DEF)
@@ -176,8 +176,9 @@ def choose_move(game):
     magic_defense = game.Human_Knowns["MDEF"]
     #If you have an ideal move, stick with it.
     if game.Ideal_Move:
-        game.make_move(game.Ideal_Move)
-        return game.Ideal_Move
+    	game.ai_move = game.Ideal_Move
+        game.make_move(game.ai_move)
+        return game.ai_move
     else:
         #Otherwise, calculate a score for all moves and choose the best.
         top_score = 0
@@ -195,18 +196,20 @@ def choose_move(game):
 	    #Now, if you have exhausted all unknowns, you have your ideal move.
 	    if weakness and defense and magic_defense:
 	        game.Ideal_Move = ideal_moves[0]
-	        game.make_move(game.Ideal_Move)
-	        return game.Ideal_Move
+	     	game.ai_move = game.Ideal_Move
+	        game.make_move(game.ai_move)
+	        return game.ai_move
 	    elif len(ideal_moves) == 1:
 			#If you don't know your unknowns but have only a list of length 1,
 			#then make that move.
-	        game.make_move(ideal_moves[0])
-	        return ideal_moves[0]
+			game.ai_move = ideal_moves[0]
+	        game.make_move(game.ai_move)
+	        return game.ai_move
 	    else:
 			#Otherwise, make a random choice.
-	        chosen_move = random.choice(ideal_moves)
-	        game.make_move(chosen_move)
-	        return chosen_move
+	        game.ai_move = random.choice(ideal_moves)
+	        game.make_move(game.ai_move)
+	        return game.ai_move
 	#Only return failure if something went terribly wrong and the AI couldn't
 	#make a move.
     return "FAILURE"

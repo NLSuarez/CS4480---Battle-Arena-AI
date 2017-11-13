@@ -36,7 +36,9 @@ class Combatant(object):
 	NAME = "" #determined at creation
 	ELEMENTAL_AFFINITY = ""
 	ELEMENTAL_WEAKNESS = ""
-	HP = 0
+	MAX_HP = 0 #Static
+	PREVIOUS_HP = 0
+	HP = 0 #Current
 	ATT = 0
 	MATT = 0
 	DEF = 0
@@ -119,6 +121,8 @@ class Combatant(object):
 
 	def generateStats(self):
 		#HP should be consistent between opponents for now
+		self.MAX_HP = 500
+		self.PREVIOUS_HP = 500
 		self.HP = 500
 		#DEF and ATT are physical based and directly opposed
 		#MDEF and MATT are magical based and directly opposed
@@ -181,6 +185,9 @@ class HumanCombatant(Combatant):
                 move = possible_moves[possible_moves_str.index(str(move))]
                 return move
 
+    def is_human(self):
+    	return True
+
 class AICombatant(Combatant):
 	def __init__(self, AI_algo, name):
 		super(AICombatant, self).__init__(self, name)
@@ -189,6 +196,9 @@ class AICombatant(Combatant):
 
     def ask_move(self, game):
         return self.AI_algo(game)
+
+    def is_human(self)
+    	return False
 
 class Battle( TwoPlayersGame ):
 	"""
@@ -270,9 +280,14 @@ class Battle( TwoPlayersGame ):
 				ROUGH_DAMAGE = MATT_MIN
 			else:
 				pass
-			Damage = ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER
+			Damage = int(ceil(ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER))
 
+		#Update HP
+		self.opponent.PREVIOUS_HP = self.opponent.HP
 		self.opponent.HP = self.opponent.HP - Damage
+		#If less than 0, set HP to 0.
+		if self.opponent.HP < 0:
+			self.opponent.HP = 0
 
 	def lose(self):
 		return self.player.HP == 0
@@ -282,4 +297,9 @@ class Battle( TwoPlayersGame ):
 		return self.lose()
 
 	def show(self):
-		print("Your opponent now has HP:{}".format(self.opponent.HP))
+		if self.opponent.is_human:
+			print("The Computer's current HP is {}.".format(self.player.HP))
+			print("Your current HP is {}.".format(self.opponent.HP))
+		else:
+			print("Your current HP is {}.".format(self.player.HP))
+			print("The Computer's current HP is {}.".format(self.opponent.HP))
