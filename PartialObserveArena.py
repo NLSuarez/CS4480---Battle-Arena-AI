@@ -33,9 +33,9 @@ def score_move(game, move):
 	#Get positive attributes from current player
 
 	ATT = game.player.ATT
-	ATT_MIN = int(ceil(ATT * 0.2)) # Minimum of 20% ATT value as damage
+	ATT_MIN = 20 # Minimum of 20 damage
 	MATT = game.player.MATT
-	MATT_MIN = int(ceil(MATT * 0.2)) # Minimum of 20% MATT value as damage
+	MATT_MIN = 20 # Minimum of 20 damage
 	AFFINITY = game.player.ELEMENTAL_AFFINITY
 
 	#Get reductive attributes from other player
@@ -88,7 +88,7 @@ def score_move(game, move):
 			ROUGH_DAMAGE = ATT_MIN
 		else:
 			pass
-		guess_damage = ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER
+		guess_damage = int(ceil(ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER))
 	elif move.TYPE == 'MAGICAL':
 		#Curb to minimum
 		ROUGH_DAMAGE = MATT - MDEF
@@ -96,7 +96,7 @@ def score_move(game, move):
 			ROUGH_DAMAGE = MATT_MIN
 		else:
 			pass
-		guess_damage = ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER
+		guess_damage = int(ceil(ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER))
 
 	'''Now determine learning modifier.'''
 
@@ -116,9 +116,9 @@ def score_move(game, move):
 	if not know_def or not know_mdef:
 		if move.ELEMENT != AFFINITY:
 			if move.TYPE == "PHYSICAL" and not know_def:
-				learning_modifier = int(ceil(0.5 * (ATT - DEF)))
+				learning_modifier = int(ceil(0.5 * ROUGH_DAMAGE))
 			elif move.TYPE == "MAGICAL" and not know_mdef:
-				learning_modifier = int(ceil(0.5 * (MATT - MDEF)))
+				learning_modifier = int(ceil(0.5 * ROUGH_DAMAGE))
 			else:
 				pass
 		else:

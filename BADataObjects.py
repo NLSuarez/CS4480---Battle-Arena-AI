@@ -244,9 +244,9 @@ class Battle( TwoPlayersGame ):
 		#Get positive attributes from current player
 
 		ATT = self.player.ATT
-		ATT_MIN = int(ceil(ATT * 0.2)) # Minimum of 20% ATT value as damage
+		ATT_MIN = 20 # Minimum of 20 damage
 		MATT = self.player.MATT
-		MATT_MIN = int(ceil(MATT * 0.2)) # Minimum of 20% MATT value as damage
+		MATT_MIN = 20 # Minimum of 20 damage
 		AFFINITY = self.player.ELEMENTAL_AFFINITY
 
 		#Get reductive attributes from other player
@@ -256,13 +256,14 @@ class Battle( TwoPlayersGame ):
 
 		#Design note: Affinity and weakness each multiply damage by 1.5.
 		#Max multiplier is therefore 2.25.
-		ELEMENTAL_MULTIPLIER = 1
 		if move.ELEMENT == AFFINITY and move.ELEMENT == WEAKNESS:
 			ELEMENTAL_MULTIPLIER = 2.25
 		elif move.ELEMENT == AFFINITY:
 			ELEMENTAL_MULTIPLIER = 1.5
 		elif move.ELEMENT == WEAKNESS:
 			ELEMENTAL_MULTIPLIER = 1.5
+		else:
+			ELEMENTAL_MULTIPLIER = 1
 
 		#Determine absolute damage with given attributes
 		if move.TYPE == 'PHYSICAL':
@@ -272,7 +273,7 @@ class Battle( TwoPlayersGame ):
 				ROUGH_DAMAGE = ATT_MIN
 			else:
 				pass
-			Damage = ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER
+			Damage = int(ceil(ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER))
 		elif move.TYPE == 'MAGICAL':
 			#Curb to minimum
 			ROUGH_DAMAGE = MATT - MDEF
@@ -300,12 +301,14 @@ class Battle( TwoPlayersGame ):
 		return self.lose()
 
 	def show(self):
-		if self.opponent.is_human:
+		if self.opponent.is_human() and not self.player.is_human():
 			print("The Computer's current HP is {}.".format(self.player.HP))
 			print("Your current HP is {}.".format(self.opponent.HP))
-		else:
+		elif self.player.is_human() and not self.opponent.is_human():
 			print("Your current HP is {}.".format(self.player.HP))
 			print("The Computer's current HP is {}.".format(self.opponent.HP))
+		else:
+			print("Error")
 
 	def update_unknowns(self, move):
 		'''Step 1: Recognize if the AI is making the move.'''
