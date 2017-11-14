@@ -56,18 +56,20 @@ if __name__== '__main__':
 	'''Create game object and operate.'''
 	ArenaMatch = Battle( Available_Moves, [Human, AI])
 	while not ArenaMatch.is_over():
-	    ArenaMatch.show()
-	    if ArenaMatch.nplayer==1:  # we are assuming player 1 is a Human_Player
-	        poss = ArenaMatch.possible_moves()
-	        for index, move in enumerate(poss):
-	            print("{} : {}".format(index, move.NAME))
-	        index = int(input("Choose attack number: "))
-	        move = poss[index]
-	        print("You used '{}'.".format(move.NAME))
-	    else:  # we are assuming player 2 is an AI_Player
-	        move = ArenaMatch.get_move()
-	        print("The Computer used '{}'.".format(move.NAME))
-	    damage = ArenaMatch.play_move(move) #Method returns damage for us.
-	    print("It did {} points in {} and {} damage.".format(damage, move.ELEMENT, move.TYPE))
+		ArenaMatch.show()
+		if ArenaMatch.nplayer==1:  # we are assuming player 1 is a Human_Player
+			poss = ArenaMatch.possible_moves()
+			for index, move in enumerate(poss):
+				print("{} : {}".format(index, move.NAME))
+			index = int(input("Choose attack number: "))
+			move = poss[index]
+			print("You used '{}'.".format(move.NAME))
+		else:  # we are assuming player 2 is an AI_Player
+			move = ArenaMatch.get_move()
+			print("The Computer used '{}'.".format(move.NAME))
+
+		damage = ArenaMatch.play_move(move) #Method returns damage for us.
+		print("It did {} points in {} and {} damage.".format(damage, move.ELEMENT, move.TYPE))
+
 		if move.ELEMENT == ArenaMatch.player.ELEMENTAL_WEAKNESS:
 			print("It was super effective!")

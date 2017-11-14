@@ -3,7 +3,6 @@ import random
 from math import ceil
 #3rd party modules
 from easyAI import TwoPlayersGame
-from easyAI.Player import Human_Player, AI_Player
 
 TYPE_OPTIONS = [
 	'MAGICAL'
@@ -156,47 +155,47 @@ class HumanCombatant(Combatant):
 	"""A human, arena combatant."""
 
 	def __init__(self, name):
-		super(HumanCombatant, self).__init__(self, name)
+		super(HumanCombatant, self).__init__(name)
 
-    def ask_move(self, game):
-        possible_moves = game.possible_moves()
-        # The str version of every move for comparison with the user input:
-        possible_moves_str = list(map(str, game.possible_moves()))
-        move = "NO_MOVE_DECIDED_YET"
-        while True:
-            move = input("\nPlayer %s what do you play ? "%(game.nplayer))
-            if move == 'show moves':
-                print ("Possible moves:\n"+ "\n".join(
-                       ["#%d: %s"%(i+1,m) for i,m in enumerate(possible_moves)])
-                       +"\nType a move or type 'move #move_number' to play.")
+	def ask_move(self, game):
+		possible_moves = game.possible_moves()
+		# The str version of every move for comparison with the user input:
+		possible_moves_str = list(map(str, game.possible_moves()))
+		move = "NO_MOVE_DECIDED_YET"
+		while True:
+			move = input("\nPlayer %s what do you play ? "%(game.nplayer))
+			if move == 'show moves':
+				print ("Possible moves:\n"+ "\n".join(
+					["#%d: %s"%(i+1,m) for i,m in enumerate(possible_moves)])
+					+"\nType a move or type 'move #move_number' to play.")
 
-            elif move == 'quit':
-                raise KeyboardInterrupt
+			elif move == 'quit':
+				raise KeyboardInterrupt
 
-            elif move.startswith("move #"):
-                # Fetch the corresponding move and return.
-                move = possible_moves[int(move[6:])-1]
-                return move
+			elif move.startswith("move #"):
+				# Fetch the corresponding move and return.
+				move = possible_moves[int(move[6:])-1]
+				return move
 
-            elif str(move) in possible_moves_str:
-                # Transform the move into its real type (integer, etc. and return).
-                move = possible_moves[possible_moves_str.index(str(move))]
-                return move
+			elif str(move) in possible_moves_str:
+				# Transform the move into its real type (integer, etc. and return).
+				move = possible_moves[possible_moves_str.index(str(move))]
+				return move
 
-    def is_human(self):
-    	return True
+	def is_human(self):
+		return True
 
 class AICombatant(Combatant):
 	def __init__(self, AI_algo, name):
-		super(AICombatant, self).__init__(self, name)
+		super(AICombatant, self).__init__(name)
 		self.AI_algo = AI_algo
-        self.move = {}
+		self.move = {}
 
-    def ask_move(self, game):
-        return self.AI_algo(game)
+	def ask_move(self, game):
+		return self.AI_algo(game)
 
-    def is_human(self)
-    	return False
+	def is_human(self):
+		return False
 
 class Battle( TwoPlayersGame ):
 	"""

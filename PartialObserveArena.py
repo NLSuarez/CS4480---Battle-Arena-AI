@@ -1,4 +1,5 @@
 import random
+from math import ceil
 from BAHelpFunctions import findOpposingElement
 '''
 Made in the spirit of the negamax algorithm, this algorithm will do two things.
@@ -18,16 +19,16 @@ def score_move(game, move):
 	#initialize local variables
 	guess_damage = 0
 	score = 0
-    learning_modifier = 0 #Increases the score of a move if it helps the AI
-    #learn something.
+	learning_modifier = 0 #Increases the score of a move if it helps the AI
+	#learn something.
 
 	#fetch human knowns
-	know_affinity = Human_Knowns["Affinity"]
-	know_weakness = Human_Knowns["Weakness"]
-	know_def = Human_Knowns["DEF"]
-	know_mdef = Human_Knowns["MDEF"]
-	know_att = Human_Knowns["ATT"]
-	know_matt = Human_Knowns["MATT"]
+	know_affinity = game.Human_Knowns["Affinity"]
+	know_weakness = game.Human_Knowns["Weakness"]
+	know_def = game.Human_Knowns["DEF"]
+	know_mdef = game.Human_Knowns["MDEF"]
+	know_att = game.Human_Knowns["ATT"]
+	know_matt = game.Human_Knowns["MATT"]
 
 	#Get positive attributes from current player
 
@@ -115,9 +116,9 @@ def score_move(game, move):
 	if not know_def or not know_mdef:
 		if move.ELEMENT != AFFINITY:
 			if move.TYPE == "PHYSICAL" and not know_def:
-				learning_modifier = 0.5 * (ATT - DEF)
+				learning_modifier = int(ceil(0.5 * (ATT - DEF)))
 			elif move.TYPE == "MAGICAL" and not know_mdef:
-				learning modifier = 0.5 * (MATT - MDEF)
+				learning_modifier = int(ceil(0.5 * (MATT - MDEF)))
 			else:
 				pass
 		else:
@@ -169,79 +170,78 @@ def score_move(game, move):
 	return score
 
 def choose_move(game):
-    #Collect moveset
-    poss = game.possible_moves()
-    #Collect known factors for opponent
-    weakness = game.Human_Knowns["Weakness"]
-    defense = game.Human_Knowns["DEF"]
-    magic_defense = game.Human_Knowns["MDEF"]
-    #If you have an ideal move, stick with it.
-    if game.Ideal_Move:
-    	game.ai_move = game.Ideal_Move
-        return game.ai_move
-    else:
-        #Otherwise, calculate a score for all moves and choose the best.
-        top_score = 0
-        ideal_moves = []
-        for index, move in enumerate(poss):
-            score = score_move(game, move)
-            if score > top_score:
-                top_score = score
-                ideal_moves = [move]
-            elif score == top_score:
-                ideal_moves.append(move)
-            else:
+	#Collect moveset
+	poss = game.possible_moves()
+	#Collect known factors for opponent
+	weakness = game.Human_Knowns["Weakness"]
+	defense = game.Human_Knowns["DEF"]
+	magic_defense = game.Human_Knowns["MDEF"]
+	#If you have an ideal move, stick with it.
+	if game.Ideal_Move:
+		game.ai_move = game.Ideal_Move
+		return game.ai_move
+	else:
+		#Otherwise, calculate a score for all moves and choose the best.
+		top_score = 0
+		ideal_moves = []
+		for index, move in enumerate(poss):
+			score = score_move(game, move)
+			if score > top_score:
+				top_score = score
+				ideal_moves = [move]
+			elif score == top_score:
+				ideal_moves.append(move)
+			else:
 				#Ignore scores of moves less than current top score.
-                pass
-	    #Now, if you have exhausted all unknowns, you have your ideal move.
-	    if weakness and defense and magic_defense:
-	        game.Ideal_Move = ideal_moves[0]
-	     	game.ai_move = game.Ideal_Move
-	        return game.ai_move
-	    elif len(ideal_moves) == 1:
+				pass
+		#Now, if you have exhausted all unknowns, you have your ideal move.
+		if weakness and defense and magic_defense:
+			game.Ideal_Move = ideal_moves[0]
+			game.ai_move = game.Ideal_Move
+			return game.ai_move
+		elif len(ideal_moves) == 1:
 			#If you don't know your unknowns but have only a list of length 1,
 			#then make that move.
 			game.ai_move = ideal_moves[0]
-	        return game.ai_move
-	    else:
+			return game.ai_move
+		else:
 			#Otherwise, make a random choice.
-	        game.ai_move = random.choice(ideal_moves)
-	        return game.ai_move
+			game.ai_move = random.choice(ideal_moves)
+			return game.ai_move
 	#Only return failure if something went terribly wrong and the AI couldn't
 	#make a move.
-    return "FAILURE"
+	return "FAILURE"
 
 
 
 
 class Partial_Observe:
-    """
-    This is a custom algorithm that is made specifically for the Battle class.
-    It borrows some ideas from negamax and machine learning, but, instead of using
+	"""
+	This is a custom algorithm that is made specifically for the Battle class.
+	It borrows some ideas from negamax and machine learning, but, instead of using
 	a longest path to defeat strategy, it uses a shortest path to victory. The
 	algorithm involved also functions on the assumption that the universe is partially
 	observable(i.e. both opponents start the game knowing nothing about each other.):
 
-    Parameters
-    -----------
+	Parameters
+	-----------
 
-    depth:
+	depth:
 		How many moves in advance should the AI think ?
-	  	(2 moves = 1 complete turn)
-	  	Currently not used.
+		(2 moves = 1 complete turn)
+		Currently not used.
 
 	chosen_move:
 		After passing the algorithm, what move has the AI chosen?
+	"""
 
-    """
 
+	def __init__(self, depth):
+		self.depth = depth
 
-    def __init__(self, depth):
-        self.depth = depth
-
-    def __call__(self,game):
-        """
-        Returns the AI's best move given the current state of the game.
-        """
-        self.chosen_move = choose_move(game)
-        return self.chosen_move
+	def __call__(self,game):
+		"""
+		Returns the AI's best move given the current state of the game.
+		"""
+		self.chosen_move = choose_move(game)
+		return self.chosen_move

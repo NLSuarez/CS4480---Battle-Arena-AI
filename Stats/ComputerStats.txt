@@ -1,11 +1,13 @@
 Computer Stats:
 
-AI_algo: <easyAI.AI.Negamax.Negamax object at 0x02A29F50>
-move: {}
-ELEMENTAL_AFFINITY: EARTH
-ELEMENTAL_WEAKNESS: WIND
+NAME: Computer
+ELEMENTAL_AFFINITY: FIRE
+ELEMENTAL_WEAKNESS: EARTH
+MAX_HP: 500
 HP: 500
-ATT: 82
-MATT: 25
-DEF: 79
-MDEF: 36
+ATT: 91
+MATT: 33
+DEF: 98
+MDEF: 38
+AI_algo: <PartialObserveArena.Partial_Observe object at 0x0092C5D0>
+move: {}
