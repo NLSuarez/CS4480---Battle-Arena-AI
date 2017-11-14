@@ -2,11 +2,10 @@
 
 #python modules
 import os
-#3rd party
-from easyAI import Negamax
 #My modules
 from BADataObjects import Battle, HumanCombatant, AICombatant
 from BAHelpFunctions import createMoveset, createMoveGuide
+from PartialObserveArena import Partial_Observe
 
 
 if __name__== '__main__':
@@ -39,8 +38,9 @@ if __name__== '__main__':
 	os.startfile(os.path.normpath(OutFileName))#Windows only
 
 	#Create AI player stats
-	ai_algo = Negamax(2) #Think for this round and the next.
+	ai_algo = Partial_Observe(2)
 	AI = AICombatant(ai_algo, "Computer")
+	'''Debug stats for AI are output to a file.'''
 	OutFileName = "./Stats/ComputerStats.txt"
 	OutFile = open(OutFileName, 'w')
 	OutFile.write("Computer Stats:\n\n")
@@ -50,6 +50,7 @@ if __name__== '__main__':
 			OutFile.write(attr + ": " + str(value) + "\n")
 
 	OutFile.close()
+	#Comment out this line if playing for real and not debugging.
 	os.startfile(os.path.normpath(OutFileName))#Windows only
 
 	'''Create game object and operate.'''
@@ -62,7 +63,13 @@ if __name__== '__main__':
 	            print("{} : {}".format(index, move.NAME))
 	        index = int(input("Choose attack number: "))
 	        move = poss[index]
+	        print("You used {}.".format(move.NAME))
 	    else:  # we are assuming player 2 is an AI_Player
 	        move = ArenaMatch.get_move()
-	        print("AI plays {}".format(move))
+	        print("The Computer used {}.".format(move.NAME))
 	    ArenaMatch.play_move(move)
+	    #Somewhat unintuitive, you've already switched players after playing your move.
+	    #So the current player is now the one that suffered the damage.
+	    damage = self.player.PREVIOUS_HP - self.player.HP
+	    print("It did {} {} and {} damage.".format(damage, move.ELEMENT, move.TYPE))
+
