@@ -37,7 +37,6 @@ class Combatant(object):
 	ELEMENTAL_AFFINITY = ""
 	ELEMENTAL_WEAKNESS = ""
 	MAX_HP = 0 #Static
-	PREVIOUS_HP = 0
 	HP = 0 #Current
 	ATT = 0
 	MATT = 0
@@ -122,7 +121,6 @@ class Combatant(object):
 	def generateStats(self):
 		#HP should be consistent between opponents for now
 		self.MAX_HP = 500
-		self.PREVIOUS_HP = 500
 		self.HP = 500
 		#DEF and ATT are physical based and directly opposed
 		#MDEF and MATT are magical based and directly opposed
@@ -222,8 +220,11 @@ class Battle( TwoPlayersGame ):
 
 	Elements_Tested = [
 	]
+
+	Elements_Used_By_Human = [
+	]
 	#Speed up the AI
-	#We will store the ideal move's index after it's found.
+	#We will store the ideal move after it's found.
 	#This will be determined after, at most, 4 moves.
 	Ideal_Move = False
 
@@ -283,11 +284,14 @@ class Battle( TwoPlayersGame ):
 			Damage = int(ceil(ROUGH_DAMAGE*ELEMENTAL_MULTIPLIER))
 
 		#Update HP
-		self.opponent.PREVIOUS_HP = self.opponent.HP
 		self.opponent.HP = self.opponent.HP - Damage
 		#If less than 0, set HP to 0.
 		if self.opponent.HP < 0:
 			self.opponent.HP = 0
+		#Now update unknowns
+		self.update_unknowns(move)
+		#Return damage done.
+		return Damage
 
 	def lose(self):
 		return self.player.HP == 0
@@ -303,3 +307,75 @@ class Battle( TwoPlayersGame ):
 		else:
 			print("Your current HP is {}.".format(self.player.HP))
 			print("The Computer's current HP is {}.".format(self.opponent.HP))
+
+	def update_unknowns(self, move):
+		'''Step 1: Recognize if the AI is making the move.'''
+		if not self.player.is_human():
+			'''Track 1 - Step 2: Analyze damage type.'''
+			if move.TYPE == "PHYSICAL" and not self.Human_Knowns["DEF"]:
+				self.Human_Knowns["DEF"] = True #Performance hack.
+				'''
+				We assume the AI could easily reverse and solve for the DEF
+				value of an opponent given that we already have an equation for
+				it, but we choose to bypass that since the computer already has
+				the value in memory. Same for all other values. These are
+				performance hacks.
+				'''
+			elif move.TYPE == "MAGICAL" and not self.Human_Knowns["MDEF"]:
+				self.Human_Knowns["MDEF"] = True
+			else:
+				pass #If you know both DEF and MDEF, go to step 2.
+
+			'''Track 1 - Step 3: Update elements.'''
+			#Case 1: We have found the weakness, so we pass over everything.
+			if self.Human_Knowns["Weakness"]:
+				pass
+			#Case 2: We don't know the elemental weakness of our opponent, but our
+			#latest move exposed it.
+			elif move.ELEMENT == self.opponent.ELEMENTAL_WEAKNESS:
+				self.Human_Knowns["Weakness"] = True
+			#Case 3: We don't know the weakness, and the element is not in our
+			#list of elements tested.
+			#NOTE: DO NOT INCLUDE NONE!
+			elif move.ELEMENT != "NONE" and move.ELEMENT not in self.Elements_Tested:
+				self.Elements_Tested.append(move.ELEMENT)
+				if len(self.Elements_Tested) == (len(ELEMENTAL_OPTIONS) - 1):
+					self.Human_Knowns["Weakness"] = True
+				else:
+					pass
+			#Case 4: Element in list and not a weakness.
+			else:
+				pass
+		else:
+			'''Track 2 - Step 2: If the current player is human, analyze their
+			attacks to find attack stats.'''
+			if move.TYPE == "PHYSICAL" and not self.Human_Knowns["ATT"]:
+				self.Human_Knowns["ATT"] = True #Performance hack.
+			elif move.TYPE == "MAGICAL" and not self.Human_Knowns["MATT"]:
+				self.Human_Knowns["MATT"] = True
+			else:
+				pass #If you know both ATT and MATT, go to step 2.
+
+			'''Track 2 - Step 3: Find Affinity.'''
+			#Case 1: We know the affinity already.
+			if self.Human_Knowns["Affinity"]:
+				pass
+			#Case 2: We don't know the elemental affinity of our opponent, but their
+			#latest move exposed it.
+			elif move.ELEMENT == self.player.ELEMENTAL_AFFINITY:
+				self.Human_Knowns["Affinity"] = True
+			#Case 3: We don't know the affinity, and the element is not in the AI's
+			#list of elements used by the human.
+			#NOTE: DO NOT INCLUDE NONE!
+			elif move.ELEMENT != "NONE" and move.ELEMENT not in self.Elements_Used_By_Human:
+				self.Elements_Used_By_Human.append(move.ELEMENT)
+				#Subcase: If all but one of the elements have been used and we still
+				#don't know the affinity, then we assume, by process of elimination,
+				#that the affinity is the remaining element.
+				if len(self.Elements_Used_By_Human) == (len(ELEMENTAL_OPTIONS) - 1):
+					self.Human_Knowns["Affinity"] = True
+				else:
+					pass
+			#Case 4: Element in list and not an affinity.
+			else:
+				pass

@@ -63,13 +63,11 @@ if __name__== '__main__':
 	            print("{} : {}".format(index, move.NAME))
 	        index = int(input("Choose attack number: "))
 	        move = poss[index]
-	        print("You used {}.".format(move.NAME))
+	        print("You used '{}'.".format(move.NAME))
 	    else:  # we are assuming player 2 is an AI_Player
 	        move = ArenaMatch.get_move()
-	        print("The Computer used {}.".format(move.NAME))
-	    ArenaMatch.play_move(move)
-	    #Somewhat unintuitive, you've already switched players after playing your move.
-	    #So the current player is now the one that suffered the damage.
-	    damage = self.player.PREVIOUS_HP - self.player.HP
-	    print("It did {} {} and {} damage.".format(damage, move.ELEMENT, move.TYPE))
-
+	        print("The Computer used '{}'.".format(move.NAME))
+	    damage = ArenaMatch.play_move(move) #Method returns damage for us.
+	    print("It did {} points in {} and {} damage.".format(damage, move.ELEMENT, move.TYPE))
+		if move.ELEMENT == ArenaMatch.player.ELEMENTAL_WEAKNESS:
+			print("It was super effective!")

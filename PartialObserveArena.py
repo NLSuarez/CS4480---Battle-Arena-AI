@@ -52,13 +52,13 @@ def score_move(game, move):
 	if know_weakness:
 		WEAKNESS = game.opponent.ELEMENTAL_WEAKNESS
 	else:
-		WEAKNESS = "NONE"
+		WEAKNESS = "N/A" #Doesn't match any of the allowed elements.
 
 	#Also fetch enemy attack stats.
 	if know_affinity:
 		ENEMY_AFFINITY = game.opponent.ELEMENTAL_AFFINITY
 	else:
-		ENEMY_AFFINITY = "NONE"
+		ENEMY_AFFINITY = "N/A" #Doesn't match any of the allowed elements.
 	if know_att:
 		ENEMY_ATT = game.opponent.ATT
 	else:
@@ -138,7 +138,7 @@ def score_move(game, move):
 	if not know_weakness:
 		elements_tested = game.Elements_Tested
 		#If the AI hasn't tested an element, add 50 to the learning modifier.
-		if move.ELEMENT not in elements_tested:
+		if  move.ELEMENT != "NONE" and move.ELEMENT not in elements_tested:
 			if know_affinity:
 				reverse_element = findOpposingElement(ENEMY_AFFINITY)
 				if move.ELEMENT == reverse_element:
@@ -178,7 +178,6 @@ def choose_move(game):
     #If you have an ideal move, stick with it.
     if game.Ideal_Move:
     	game.ai_move = game.Ideal_Move
-        game.make_move(game.ai_move)
         return game.ai_move
     else:
         #Otherwise, calculate a score for all moves and choose the best.
@@ -198,18 +197,15 @@ def choose_move(game):
 	    if weakness and defense and magic_defense:
 	        game.Ideal_Move = ideal_moves[0]
 	     	game.ai_move = game.Ideal_Move
-	        game.make_move(game.ai_move)
 	        return game.ai_move
 	    elif len(ideal_moves) == 1:
 			#If you don't know your unknowns but have only a list of length 1,
 			#then make that move.
 			game.ai_move = ideal_moves[0]
-	        game.make_move(game.ai_move)
 	        return game.ai_move
 	    else:
 			#Otherwise, make a random choice.
 	        game.ai_move = random.choice(ideal_moves)
-	        game.make_move(game.ai_move)
 	        return game.ai_move
 	#Only return failure if something went terribly wrong and the AI couldn't
 	#make a move.
