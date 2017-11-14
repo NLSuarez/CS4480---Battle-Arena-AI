@@ -4,6 +4,7 @@ from BAHelpFunctions import findOpposingElement
 Made in the spirit of the negamax algorithm, this algorithm will do two things.
 1. Implement a negamax in a partially observable environment.
 2. Actually bring in the scoring algorithm that couldn't transfer for easyAI.
+3. Implement some form of machine learning.
 '''
 
 def score_move(game, move):
