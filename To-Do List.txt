@@ -1,6 +1,0 @@
-Notes:
-Show Game confuses the names of opponents and says I am the computer.
-AI was able to do a fraction damage with its affinity. Fix this.
-There's some spacing in output that you should fix.
-Should put some flavor text for affinity in addition to weakness.
-Add a victory message.

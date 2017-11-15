@@ -1,0 +1,25 @@
+ATT: Attack
+DEF: Defense
+MATT: Magic Attack
+MDEF: Magic Defense
+ELEMENTAL AFFINITY: Element you do the most damage with.
+ELEMENTAL WEAKNESS: Element that deals the most damage to you.
+
+Damage formula:
+Elemental affinity? x1.5
+Elemental weakness? x1.5
+Both? x2.25
+ATT-DEF for physical. Minimum of 20.
+MATT-MDEF for magical. Minimum of 20.
+
+Elements:
+Wind
+Earth
+Fire
+Water
+
+None is a special element. No one has an affinity or weakness
+toward it.
+
+Objective:
+Reduce your opponent's HP to 0.
