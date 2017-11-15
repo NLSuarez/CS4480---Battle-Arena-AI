@@ -4,13 +4,18 @@
 import sys
 from PyQt5.QtCore import QCoreApplication #For getting to the application instance
 from PyQt5.QtWidgets import (QApplication, QWidget,
-	QPushButton, QToolTip, QMessageBox, 
+	QPushButton, QToolTip, QMessageBox,
 	QDesktopWidget, QMainWindow, QAction, qApp,
 	QTextEdit)
 
 	#QWidget is for windows other than main window
 	#Main window allows for menu bars and such
-from PyQt5.QtGui import (QIcon, QFont)
+from PyQt5.QtGui import (QIcon, QFont, QTextCursor)
+
+#My modules
+from BADataObjects import Battle, HumanCombatant, AICombatant
+from BAHelpFunctions import createMoveset, createMoveGuide
+from PartialObserveArena import Partial_Observe
 
 class Arena(QMainWindow):
 
@@ -22,9 +27,14 @@ class Arena(QMainWindow):
 	def initUI(self):
 		QToolTip.setFont(QFont('SansSerif', 10))
 
-		textEdit = QTextEdit()
-		self.setCentralWidget(textEdit)
-		
+		#Output Widget
+		battleStatus = QTextEdit()
+		battleStatus.setReadOnly(True)
+		battleStatus.moveCursor(QTextCursor.End)
+		sb = battleStatus.verticalScrollBar()
+		sb.setValue(sb.maximum())
+		self.setCentralWidget(battleStatus)
+
 		startAct = QAction(QIcon('startBattle.png'), '&New Game', self)
 		startAct.setShortcut('Ctrl+N')
 		startAct.setStatusTip('New Game')
@@ -49,15 +59,15 @@ class Arena(QMainWindow):
 
 	def center(self):
 		qr = self.frameGeometry()
-		#We get a rectangle specifying the geometry of the main window. This includes any window frame. 
+		#We get a rectangle specifying the geometry of the main window. This includes any window frame.
 		cp = QDesktopWidget().availableGeometry().center()
-		#We figure out the screen resolution of our monitor. And from this resolution, we get the center point. 
+		#We figure out the screen resolution of our monitor. And from this resolution, we get the center point.
 		qr.moveCenter(cp)
-		#Our rectangle has already its width and height. Now we set the center of the rectangle to the center 
-		#of the screen. The rectangle's size is unchanged. 
+		#Our rectangle has already its width and height. Now we set the center of the rectangle to the center
+		#of the screen. The rectangle's size is unchanged.
 		self.move(qr.topLeft())
-		#Finally, we move the top-left point of the application window to the top-left point of the qr rectangle, 
-		#thus centering the window on our screen. 
+		#Finally, we move the top-left point of the application window to the top-left point of the qr rectangle,
+		#thus centering the window on our screen.
 
 	def closeEvent(self, event):
 
@@ -67,10 +77,10 @@ class Arena(QMainWindow):
 
 		'''
 		From zetcode.com/gui/pyqt5/firstprograms:
-		We show a message box with two buttons: Yes and No. The first string appears on the titlebar. The second string 
-		is the message text displayed by the dialog. The third argument specifies the combination of buttons appearing 
+		We show a message box with two buttons: Yes and No. The first string appears on the titlebar. The second string
+		is the message text displayed by the dialog. The third argument specifies the combination of buttons appearing
 		in the dialog. The last parameter is the default button. It is the button which has initially the keyboard focus.
-		The return value is stored in the reply variable. 
+		The return value is stored in the reply variable.
 		'''
 
 		if reply == QMessageBox.Yes:
@@ -82,10 +92,61 @@ class Arena(QMainWindow):
 
 if __name__== '__main__':
 
-	app = QApplication(sys.argv) 
+	#Create the necessary objects for attack moves and store them
+	Available_Moves = createMoveset()
+	#Create human player stats
+	Human = HumanCombatant("Stefan")
+	#Create AI player stats
+	ai_algo = Partial_Observe(2)
+	AI = AICombatant(ai_algo, "Computer")
+
+	'''Create game object and operate.'''
+	ArenaMatch = Battle( Available_Moves, [Human, AI])
+	'''Need to functionally convert this to the GUI version.
+	while not ArenaMatch.is_over():
+		print("\n")
+		ArenaMatch.show()
+		print("\n")
+		if ArenaMatch.nplayer==1:  # we are assuming player 1 is a Human_Player
+			poss = ArenaMatch.possible_moves()
+			for index, move in enumerate(poss):
+				print("{} : {}".format(index, move.NAME))
+			print("\n")
+			index = int(input("Choose attack number: "))
+			move = poss[index]
+			print("\n")
+			print("You used '{}'.".format(move.NAME))
+			print("\n")
+		else:  # we are assuming player 2 is an AI_Player
+			move = ArenaMatch.get_move()
+			print("\n")
+			print("The Computer used '{}'.".format(move.NAME))
+			print("\n")
+
+		damage = ArenaMatch.play_move(move) #Method returns damage for us.
+		print("It did {} points in {} and {} damage.".format(damage, move.ELEMENT, move.TYPE))
+
+		if move.ELEMENT == ArenaMatch.player.ELEMENTAL_WEAKNESS and move.ELEMENT == ArenaMatch.opponent.ELEMENTAL_AFFINITY:
+			print("It was super effective and enhanced!")
+		elif move.ELEMENT == ArenaMatch.player.ELEMENTAL_WEAKNESS:
+			print("It was super effective!")
+		elif move.ELEMENT == ArenaMatch.opponent.ELEMENTAL_AFFINITY:
+			print("It was enhanced!")
+	print("\n")
+	if AI.HP == 0:
+		print("Congratulations, human. You beat me.")
+	elif Human.HP == 0:
+		print("Game Over. You lost.")
+
+	'''
+	app = QApplication(sys.argv)
 	#An application is a superclass provided the system arguments
 	#w = QWidget() #A default widget like this is a window.
 	ba = Arena()
+	statusArea = ba.centralWidget()
+	statusArea.append("Hello")
+	statusArea.append("\nI am working.")
+
 
 	sys.exit(app.exec_()) #Execution loop wrapped inside a safe exit method.
 	#Will keep track of reasons for application closing
