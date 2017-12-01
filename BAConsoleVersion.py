@@ -23,7 +23,10 @@ if __name__== '__main__':
 
 	'''Create necessary documents and open them.'''
 	OutFileName = "./Guides/MovesGuide.txt"
-	os.startfile(os.path.normpath(OutFileName))#Windows only
+	try:
+		os.startfile(os.path.normpath(OutFileName))#Windows only
+	except:
+		pass
 	#Create human player stats
 	Human = HumanCombatant("Stefan")
 	OutFileName = "./Stats/PlayerStats.txt"
@@ -35,7 +38,10 @@ if __name__== '__main__':
 			OutFile.write(attr + ": " + str(value) + "\n")
 
 	OutFile.close()
-	os.startfile(os.path.normpath(OutFileName))#Windows only
+	try:
+		os.startfile(os.path.normpath(OutFileName))#Windows only
+	except:
+		pass
 
 	#Create AI player stats
 	ai_algo = Partial_Observe(2)
@@ -51,7 +57,10 @@ if __name__== '__main__':
 
 	OutFile.close()
 	#Comment out this line if playing for real and not debugging.
-	os.startfile(os.path.normpath(OutFileName))#Windows only
+	try:
+		os.startfile(os.path.normpath(OutFileName))#Windows only
+	except:
+		pass
 
 	'''Create game object and operate.'''
 	ArenaMatch = Battle( Available_Moves, [Human, AI])
