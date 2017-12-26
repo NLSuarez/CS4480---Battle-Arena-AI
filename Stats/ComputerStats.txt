@@ -1,13 +1,13 @@
 Computer Stats:
 
 NAME: Computer
-ELEMENTAL_AFFINITY: EARTH
-ELEMENTAL_WEAKNESS: WIND
+ELEMENTAL_AFFINITY: WATER
+ELEMENTAL_WEAKNESS: FIRE
 MAX_HP: 500
 HP: 500
-MATT: 96
-ATT: 44
-MDEF: 93
-DEF: 30
-AI_algo: <PartialObserveArena.Partial_Observe object at 0x0000000002B7B1D0>
+ATT: 80
+MATT: 34
+DEF: 98
+MDEF: 28
+AI_algo: <PartialObserveArena.Partial_Observe object at 0x0000000002DD3240>
 move: {}

@@ -138,7 +138,7 @@ def score_move(game, move):
 	'''
 	if not know_weakness:
 		elements_tested = game.Elements_Tested
-		#If the AI hasn't tested an element, add 50 to the learning modifier.
+		#If the AI hasn't tested an element, add to the learning modifier.
 		if  move.ELEMENT != "NONE" and move.ELEMENT not in elements_tested:
 			if know_affinity:
 				reverse_element = findOpposingElement(ENEMY_AFFINITY)
@@ -146,13 +146,13 @@ def score_move(game, move):
 					#We want a hard modifier here.
 					#If you have a 50% chance of finding the weakness, that is your
 					#most valuable move right now.
-					learning_modifier += 50
+					learning_modifier += int(ceil(1.25 * ROUGH_DAMAGE))
 				elif move.ELEMENT != ENEMY_AFFINITY:
-					learning_modifier += 25
+					learning_modifier += int(ceil(0.5 * ROUGH_DAMAGE))
 				else:
 					pass
 			else:
-				learning_modifier += 50
+				learning_modifier += int(ceil(0.5 * ROUGH_DAMAGE))
 		else:
 			pass
 	else:
